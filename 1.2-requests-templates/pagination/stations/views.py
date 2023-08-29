@@ -6,11 +6,6 @@ from django.urls import reverse
 from django.conf import settings
 
 
-
-# from django.shortcuts import render, redirect
-# from django.urls import reverse
-
-
 def index(request):
     return redirect(reverse('bus_stations'))
 
@@ -30,8 +25,8 @@ def bus_stations(request):
     page = paginator.get_page(page_number)
 
     context = {
-            'bus_stations': page,
-            'page': page,
+        'bus_stations': page,
+        'page': page,
     }
 
     return render(request, 'stations/index.html', context=context)

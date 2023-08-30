@@ -39,7 +39,7 @@ def calculate_dish(request, dish_name):
             result = dict()
             for key, value in data.items():
                 new_value = value * int(servings)
-                result[key] = new_value
+                result[key] = round(new_value, 1)
             context = {
                 'dish_name': dish_name,
                 'recipe': result

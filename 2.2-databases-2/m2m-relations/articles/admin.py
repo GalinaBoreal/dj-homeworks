@@ -7,14 +7,12 @@ from .models import Article, Tag, Scope
 
 class ScopeInlineFormset(BaseInlineFormSet):
     def clean(self):
-        flag = False
         count_main = 0
         for form in self.forms:
             # В form.cleaned_data будет словарь с данными
             # каждой отдельной формы, которые вы можете проверить
             data = form.cleaned_data
             if data.get('is_main'):
-                flag = True
                 count_main += 1
             else:
                 continue
@@ -22,8 +20,11 @@ class ScopeInlineFormset(BaseInlineFormSet):
             # таким образом объект не будет сохранен,
             # а пользователю выведется соответствующее сообщение об ошибке
 
-        if flag is not False or count_main > 1:
-            raise ValidationError('Назначьте один основной тэг')
+        if count_main == 0:
+            raise ValidationError('Укажите основной тэг')
+
+        if count_main > 1:
+            raise ValidationError('Основным может быть только один тэг')
 
         return super().clean()  # вызываем базовый код переопределяемого метода
 

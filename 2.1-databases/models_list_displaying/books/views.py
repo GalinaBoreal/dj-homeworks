@@ -5,7 +5,6 @@ import datetime
 
 
 def books_view(request):
-    # template = 'books/books_list.html'
     template = 'books/catalog.html'
     books = Book.objects.all()
     context = {'books': books}

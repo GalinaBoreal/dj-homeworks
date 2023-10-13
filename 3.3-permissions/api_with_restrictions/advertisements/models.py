@@ -28,3 +28,5 @@ class Advertisement(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True
     )
+
+    objects = models.Manager()

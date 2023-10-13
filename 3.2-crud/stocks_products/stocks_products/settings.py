@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-
+    'django_filters',
     'logistic',
 ]
 
@@ -83,6 +83,8 @@ DATABASES = {
         'NAME': 'netology_stocks_products',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres'
     }
 }
 
@@ -129,3 +131,12 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 3
+}

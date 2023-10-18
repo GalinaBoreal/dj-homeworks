@@ -106,8 +106,7 @@ def test_delete_course(client, course_factory):
 
 @pytest.fixture
 def specific_settings(settings):
-    max_students = settings.MAX_STUDENTS_PER_COURSE
-    return max_students
+    return settings.MAX_STUDENTS_PER_COURSE
 
 
 @pytest.mark.parametrize(

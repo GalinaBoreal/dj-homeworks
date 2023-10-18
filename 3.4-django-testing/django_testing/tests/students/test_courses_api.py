@@ -7,6 +7,8 @@ from model_bakery import baker
 from students.models import Course, Student
 
 
+url = '/api/v1/courses/'
+
 @pytest.fixture
 def client():
     return APIClient()
@@ -32,7 +34,7 @@ def student_factory():
 def test_get_course(client, course_factory):
     """проверка получения первого курса"""
     courses = course_factory(_quantity=1)
-    response = client.get('/api/v1/courses/')
+    response = client.get(path=url)
     assert response.status_code == 200
     data = response.json()
     assert data[0]['name'] == courses[0].name
@@ -42,7 +44,7 @@ def test_get_course(client, course_factory):
 def test_get_list_course(client, course_factory):
     """проверка получения списка курсов"""
     courses = course_factory(_quantity=10)
-    response = client.get('/api/v1/courses/')
+    response = client.get(path=url)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == len(courses)
@@ -53,7 +55,7 @@ def test_id_filter_course(client, course_factory):
     """проверка фильтрации списка курсов по id"""
     courses = course_factory(_quantity=10)
     course_id = random.choice(courses).id
-    response = client.get("/api/v1/courses/", {"id": course_id})
+    response = client.get(path=url, data={"id": course_id})
     data = response.json()
     assert response.status_code == 200
     assert data[0]['id'] == course_id
@@ -65,7 +67,7 @@ def test_name_filter_course(client, course_factory):
     """проверка фильтрации списка курсов по name"""
     courses = course_factory(_quantity=10)
     course_name = random.choice(courses).name
-    response = client.get("/api/v1/courses/", {"name": course_name})
+    response = client.get(path=url, data={"name": course_name})
     data = response.json()
     assert response.status_code == 200
     assert data[0]['name'] == course_name
@@ -75,7 +77,7 @@ def test_name_filter_course(client, course_factory):
 @pytest.mark.django_db
 def test_create_course(client):
     """тест успешного создания курса"""
-    response = client.post("/api/v1/courses/", {'name': 'Unique_course'})
+    response = client.post(path=url, data={'name': 'Unique_course'})
     data = response.json()
     assert response.status_code == 201
     assert data['name'] == 'Unique_course'
@@ -86,7 +88,7 @@ def test_update_course(client, course_factory):
     """тест успешного обновления курса"""
     courses = course_factory(_quantity=10)
     course_id = random.choice(courses).id
-    response = client.patch(path=f"/api/v1/courses/{course_id}/", data={"name": "Unique_course"})
+    response = client.patch(path=f"{url}{course_id}/", data={"name": "Unique_course"})
     data = response.json()
     assert response.status_code == 200
     assert data['name'] == 'Unique_course'
@@ -99,7 +101,7 @@ def test_delete_course(client, course_factory):
     """тест успешного удаления курса"""
     courses = course_factory(_quantity=10)
     course_id = random.choice(courses).id
-    response = client.delete(f'/api/v1/courses/{course_id}/')
+    response = client.delete(path=f'{url}{course_id}/')
     assert response.status_code == 204
     assert Course.objects.count() == 9
 

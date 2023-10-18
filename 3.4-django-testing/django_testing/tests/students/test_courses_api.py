@@ -115,6 +115,6 @@ def specific_settings(settings):
     ((20, True), (10, False), (30, False))
 )
 def test_queries_students(specific_settings, quantity, expected):
-    """тест валидности студентов на курсе"""
+    """проверка валидации на макс.количество студентов на курсе"""
     result = quantity == specific_settings
     assert result == expected

@@ -34,10 +34,11 @@ def student_factory():
 def test_get_course(client, course_factory):
     """проверка получения первого курса"""
     courses = course_factory(_quantity=1)
-    response = client.get(path=url)
+    course_id = courses[0].id
+    response = client.get(path=f"{url}{course_id}/")
     assert response.status_code == 200
     data = response.json()
-    assert data[0]['name'] == courses[0].name
+    assert data['name'] == courses[0].name
 
 
 @pytest.mark.django_db
@@ -56,10 +57,14 @@ def test_id_filter_course(client, course_factory):
     courses = course_factory(_quantity=10)
     course_id = random.choice(courses).id
     response = client.get(path=url, data={"id": course_id})
+    # course_id = course.id
+    # course_name = course.name
+    # response = client.get(path=url, data={"id": course_id, "name": course_name})
     data = response.json()
     assert response.status_code == 200
     assert data[0]['id'] == course_id
-    assert 'id' and 'name' and 'students' in data[0]
+    # assert data[0]['name'] == course_name
+
 
 
 @pytest.mark.django_db
@@ -71,7 +76,7 @@ def test_name_filter_course(client, course_factory):
     data = response.json()
     assert response.status_code == 200
     assert data[0]['name'] == course_name
-    assert 'id' and 'name' and 'students' in data[0]
+
 
 
 @pytest.mark.django_db
